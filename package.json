@@ -3,15 +3,23 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "clear && tsc && node ./build",
+    "dev": "ts-node-dev ./src/index.ts",
+    "vercel-build": "npx prisma generate dev",
+    "lint": "eslint src/**/*.{tsx,ts}",
+    "lint:fix": "eslint eslint src/**/*.{tsx,ts} --fix",
+    "format": "prettier --write 'src/**/*.{ts,tsx}'"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@rocketseat/eslint-config": "^2.2.2",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
+    "eslint": "^8.57.0",
+    "globals": "^15.9.0",
     "prisma": "^5.18.0",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.5.4"
