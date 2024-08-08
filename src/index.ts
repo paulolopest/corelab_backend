@@ -1,6 +1,8 @@
 import cors from 'cors'
 import dotenv from 'dotenv'
 import express, { Express } from 'express'
+import { userRouter } from './Router/UserRouter'
+import { listRouter } from './Router/ListRouter'
 
 dotenv.config()
 
@@ -17,3 +19,6 @@ const server = app.listen(port, () => {
     console.log('Error running the server')
   }
 })
+
+app.use(userRouter)
+app.use(listRouter)

@@ -8,3 +8,41 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id String @id
+  username String @unique
+  password String
+  created_at BigInt
+  updated_at BigInt
+
+  List List[]
+  Task Task[]
+}
+
+model List {
+  id String @id
+  name String
+  user_id String
+  created_at BigInt
+  updated_at BigInt
+
+  Task Task[]
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Task {
+  id String @id
+  name String 
+  user_id String
+  list_id String?
+  description String
+  favorite Boolean @default(false)
+  color String?       
+  created_at BigInt
+  updated_at BigInt
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  list List? @relation(fields: [list_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
