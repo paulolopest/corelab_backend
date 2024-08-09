@@ -11,6 +11,24 @@ export type CreateUserBody = {
   updated_at: number
 }
 
-export type CreateListBody = {
+export type CreateTaskBody = {
   name: string
+  description: string
+  favorite: boolean
+  color?: string
+  tags?: Array<string>
+}
+
+export type EditTaskBody = {
+  name: string
+  description: string
+  favorite: boolean
+  color?: string
+  tags?: Array<string>
+}
+
+export type EditUserBody = {
+  username: string
+  password: string
+  newPassword?: string
 }

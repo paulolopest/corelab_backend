@@ -8,8 +8,23 @@ export class UserData {
           id,
           username,
           password,
-          created_at: Date.now(),
-          updated_at: Date.now(),
+          created_at: Date.now().toString(),
+          updated_at: Date.now().toString(),
+        },
+      })
+    } catch (error: any) {
+      throw new Error(error.message)
+    }
+  }
+
+  getProfile = async (id: string) => {
+    try {
+      return await prisma.user.findUnique({
+        where: { id },
+        select: {
+          id: true,
+          username: true,
+          created_at: true,
         },
       })
     } catch (error: any) {
@@ -30,6 +45,38 @@ export class UserData {
   getUserById = async (id: string) => {
     try {
       return await prisma.user.findUnique({
+        where: { id },
+      })
+    } catch (error: any) {
+      throw new Error(error.message)
+    }
+  }
+
+  editProfile = async (id: string, username?: string, password?: string) => {
+    try {
+      const data: any = { updated_at: Date.now().toString() }
+
+      if (username !== undefined) data.username = username
+      if (password !== undefined) data.password = password
+
+      return await prisma.user.update({
+        where: { id },
+        data,
+        select: {
+          id: true,
+          username: true,
+          created_at: true,
+          updated_at: true,
+        },
+      })
+    } catch (error: any) {
+      throw new Error(error.message)
+    }
+  }
+
+  deleteProfile = async (id: string) => {
+    try {
+      await prisma.user.delete({
         where: { id },
       })
     } catch (error: any) {

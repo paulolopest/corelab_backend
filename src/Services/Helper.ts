@@ -1,11 +1,13 @@
-import { User } from '@prisma/client'
 import { CustomError } from '../Models/CustomError'
 import { UserData } from '../Data/User/UserData'
+import { TaskData } from '../Data/Task/TaskData'
 import { TokenManager } from './TokenManager'
+import { Task, User } from '@prisma/client'
 
 export class Helper {
   constructor(
     private userData: UserData,
+    private taskData: TaskData,
     private tokenManager: TokenManager,
   ) {}
 
@@ -61,6 +63,22 @@ export class Helper {
         if (!user) throw new CustomError(404, 'User not found')
 
         return user
+      },
+    },
+    task: {
+      byId: async (id: string, check?: boolean, userId?: string): Promise<Task | null> => {
+        if (!id) throw new CustomError(404, 'Enter a task id')
+
+        const task: Task | null = await this.taskData.getTaskById(id)
+
+        if (!task) throw new CustomError(404, 'Task not found')
+        if (check) {
+          if (task.user_id !== userId) {
+            throw new CustomError(409, 'You have not permission to updated this task')
+          }
+        }
+
+        return task
       },
     },
   }

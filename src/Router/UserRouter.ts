@@ -6,3 +6,9 @@ export const userRouter: Router = express.Router()
 // Routes
 
 userRouter.post('/user/create', userController.create)
+
+userRouter.get('/user/profile', userController.getProfile)
+
+userRouter.put('/user/edit', userController.editProfile)
+
+userRouter.delete('/user/delete', userController.deleteProfile)

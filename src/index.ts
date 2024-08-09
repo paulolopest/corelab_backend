@@ -2,7 +2,7 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import express, { Express } from 'express'
 import { userRouter } from './Router/UserRouter'
-import { listRouter } from './Router/ListRouter'
+import { taskRouter } from './Router/TaskRouter'
 
 dotenv.config()
 
@@ -21,4 +21,4 @@ const server = app.listen(port, () => {
 })
 
 app.use(userRouter)
-app.use(listRouter)
+app.use(taskRouter)
