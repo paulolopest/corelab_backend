@@ -46,12 +46,20 @@ export class Helper {
 
   validate = {
     user: {
-      byUsername: async (username: string): Promise<User | null> => {
-        const user: User | null = await this.userData.getUserByUsername(username)
+      byUsername: async (username: string, get?: boolean): Promise<User | null> => {
+        if (get) {
+          const user: User | null = await this.userData.getUserByUsername(username)
 
-        if (user) throw new CustomError(404, 'Username already in use')
+          if (!user) throw new CustomError(404, 'Account not found')
 
-        return user
+          return user
+        } else {
+          const user: User | null = await this.userData.getUserByUsername(username)
+
+          if (user) throw new CustomError(404, 'Username already in use')
+
+          return user
+        }
       },
 
       byToken: async (token: string): Promise<User | null> => {

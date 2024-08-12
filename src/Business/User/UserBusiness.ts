@@ -5,7 +5,7 @@ import { CustomError } from '../../Models/CustomError'
 import { IdGenerator } from '../../Services/IdGenerator'
 import { HashManager } from '../../Services/HashManager'
 import { TokenManager } from '../../Services/TokenManager'
-import { EditUserBody, SignUpBody } from '../../Models/Requests'
+import { EditUserBody, AuthBody } from '../../Models/Requests'
 
 export class UserBusiness {
   constructor(
@@ -16,7 +16,7 @@ export class UserBusiness {
     private hashManager: HashManager,
   ) {}
 
-  create = async (body: SignUpBody) => {
+  create = async (body: AuthBody) => {
     try {
       this.helper.verifyFields(body)
 
@@ -34,6 +34,24 @@ export class UserBusiness {
       await this.userData.create(id, body.username, hashedPassword)
 
       return token
+    } catch (error: any) {
+      if (error instanceof CustomError) {
+        throw new CustomError(error.statusCode, error.message)
+      } else {
+        throw new Error(error.message)
+      }
+    }
+  }
+
+  login = async (body: AuthBody) => {
+    try {
+      const user: User | null = (await this.helper.validate.user.byUsername(
+        body.username,
+        true,
+      )) as User
+      const verifyPassword: boolean = await this.hashManager.compare(body.password, user.password)
+
+      if (verifyPassword) return this.tokenManager.generate({ id: user.id })
     } catch (error: any) {
       if (error instanceof CustomError) {
         throw new CustomError(error.statusCode, error.message)

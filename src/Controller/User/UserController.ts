@@ -1,16 +1,32 @@
 import { Request, Response } from 'express'
 import { CustomError } from '../../Models/CustomError'
 import { UserBusiness } from '../../Business/User/UserBusiness'
-import { EditUserBody, SignUpBody } from '../../Models/Requests'
+import { EditUserBody, AuthBody } from '../../Models/Requests'
 
 export class UserController {
   constructor(private userBusiness: UserBusiness) {}
 
   create = async (req: Request, res: Response) => {
     try {
-      const body: SignUpBody = req.body
+      const body: AuthBody = req.body
 
       const result: string = await this.userBusiness.create(body)
+
+      res.status(201).send({ message: 'Success', token: result })
+    } catch (error: any) {
+      if (error instanceof CustomError) {
+        res.status(error.statusCode).send(error.message)
+      } else {
+        res.status(404).send(error.message)
+      }
+    }
+  }
+
+  login = async (req: Request, res: Response) => {
+    try {
+      const body: AuthBody = req.body
+
+      const result: string | undefined = await this.userBusiness.login(body)
 
       res.status(201).send({ message: 'Success', token: result })
     } catch (error: any) {
