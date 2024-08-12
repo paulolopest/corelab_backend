@@ -8,6 +8,7 @@ export const taskRouter: Router = express.Router()
 taskRouter.post('/task/create', taskController.create)
 
 taskRouter.get('/task/get-all', taskController.getTasks)
+taskRouter.get('/task/:id', taskController.getTaskById)
 taskRouter.get('/task/search/:word', taskController.searchTask)
 
 taskRouter.put('/task/edit/:id', taskController.editTask)

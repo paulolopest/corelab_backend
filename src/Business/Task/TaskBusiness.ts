@@ -43,6 +43,21 @@ export class TaskBusiness {
     }
   }
 
+  getTaskById = async (token: string, id: string) => {
+    try {
+      const user: User | null = (await this.helper.validate.user.byToken(token)) as User
+      const task: Task | null = (await this.helper.validate.task.byId(id, true, user.id)) as Task
+
+      return task
+    } catch (error: any) {
+      if (error instanceof CustomError) {
+        throw new CustomError(error.statusCode, error.message)
+      } else {
+        throw new Error(error.message)
+      }
+    }
+  }
+
   searchTask = async (token: string, word: string) => {
     try {
       const user: User | null = (await this.helper.validate.user.byToken(token)) as User

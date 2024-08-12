@@ -82,7 +82,7 @@ export class Helper {
         if (!task) throw new CustomError(404, 'Task not found')
         if (check) {
           if (task.user_id !== userId) {
-            throw new CustomError(409, 'You have not permission to updated this task')
+            throw new CustomError(409, 'You are not the owner task')
           }
         }
 

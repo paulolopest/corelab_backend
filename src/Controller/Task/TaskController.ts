@@ -1,8 +1,8 @@
-import { TaskBusiness } from '../../Business/Task/TaskBusiness'
-import { CustomError } from '../../Models/CustomError'
-import { CreateTaskBody, EditTaskBody } from '../../Models/Requests'
-import { Request, Response } from 'express'
 import { Task } from '@prisma/client'
+import { Request, Response } from 'express'
+import { CustomError } from '../../Models/CustomError'
+import { TaskBusiness } from '../../Business/Task/TaskBusiness'
+import { CreateTaskBody, EditTaskBody } from '../../Models/Requests'
 
 export class TaskController {
   constructor(private taskBusiness: TaskBusiness) {}
@@ -35,6 +35,23 @@ export class TaskController {
         order as string,
         by as string,
       )
+
+      res.status(200).send({ message: 'Success', response: result })
+    } catch (error: any) {
+      if (error instanceof CustomError) {
+        res.status(error.statusCode).send(error.message)
+      } else {
+        res.status(404).send(error.message)
+      }
+    }
+  }
+
+  getTaskById = async (req: Request, res: Response) => {
+    try {
+      const token: string = req.headers.authorization as string
+      const { id } = req.params
+
+      const result: Task | null = await this.taskBusiness.getTaskById(token, id)
 
       res.status(200).send({ message: 'Success', response: result })
     } catch (error: any) {
