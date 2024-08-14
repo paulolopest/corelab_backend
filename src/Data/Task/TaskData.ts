@@ -52,7 +52,12 @@ export class TaskData {
     }
   }
 
-  searchTask = async (userId: string, word: string) => {
+  searchTask = async (
+    userId: string,
+    word: string,
+    by: keyof typeof prisma.task.fields,
+    order: 'asc' | 'desc' = 'asc',
+  ) => {
     try {
       const result: Task[] = await prisma.task.findMany({
         where: {
@@ -60,8 +65,12 @@ export class TaskData {
           OR: [
             { name: { search: word } },
             { description: { search: word } },
+            { color: { search: word } },
             { tags: { has: word } },
           ],
+        },
+        orderBy: {
+          [by]: order,
         },
       })
 

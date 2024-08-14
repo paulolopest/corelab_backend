@@ -67,8 +67,14 @@ export class TaskController {
     try {
       const token: string = req.headers.authorization as string
       const { word } = req.params
+      const { order, by } = req.query
 
-      const result = await this.taskBusiness.searchTask(token, word as string)
+      const result = await this.taskBusiness.searchTask(
+        token,
+        word as string,
+        order as string,
+        by as string,
+      )
 
       res.status(200).send({ message: 'Success', response: result })
     } catch (error: any) {

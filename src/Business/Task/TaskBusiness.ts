@@ -58,12 +58,12 @@ export class TaskBusiness {
     }
   }
 
-  searchTask = async (token: string, word: string) => {
+  searchTask = async (token: string, word: string, order?: string, by?: string) => {
     try {
       const user: User | null = (await this.helper.validate.user.byToken(token)) as User
       if (!word || word === ':word') throw new CustomError(400, 'Enter a word')
 
-      return await this.taskData.searchTask(user.id, word)
+      return await this.taskData.searchTask(user.id, word, by as any, order as any)
     } catch (error: any) {
       if (error instanceof CustomError) {
         throw new CustomError(error.statusCode, error.message)
